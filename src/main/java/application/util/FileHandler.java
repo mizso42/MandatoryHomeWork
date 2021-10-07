@@ -23,7 +23,6 @@ public class FileHandler {
             List<String> queries = Arrays.asList(line.toString().split(";"));
             queries.forEach(query -> query += ";");
 
-
             return queries;
         } catch (FileNotFoundException e) {
             return null;
