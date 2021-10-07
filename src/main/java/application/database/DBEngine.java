@@ -53,7 +53,7 @@ public class DBEngine {
                     Statement statement = connection.createStatement();
                     statement.execute(query);
                 } catch (SQLException e) {
-                    System.out.println("Error during creating database.");;
+                    System.out.println("Error during creating database.");
                 }
             }
         } else {
