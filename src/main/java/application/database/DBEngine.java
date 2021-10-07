@@ -44,10 +44,4 @@ public class DBEngine {
     public void createDB(String dbName) {
 
     }
-
-    public void close() {
-        try {
-            connection.close();
-        } catch (Exception e) {}
-    }
 }
