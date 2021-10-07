@@ -1,8 +1,12 @@
 package application.database;
 
+import application.util.FileHandler;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
 import java.util.Properties;
 
 public class DBEngine {
@@ -11,14 +15,13 @@ public class DBEngine {
 
     private String dbUrl = System.getenv("DB_URL") != null ?
                             System.getenv("DB_URL") : "jdbc:mysql://localhost:3306/";
-    private String dbName = System.getenv("DB_NAME") != null ?
-                            System.getenv("DB_NAME") : "blogDB";
     private String dbProperties = System.getenv("DB_PROPERTIES") != null ?
                             System.getenv("DB_PROPERTIES") : "?useUnicode=yes&characterEncoding=UTF-8";
 
     public DBEngine() {
         connection = connect();
-        createDB(System.getenv(dbName));
+        if (isConnected())
+            createDB();
     }
 
     public boolean isConnected() {
@@ -26,7 +29,7 @@ public class DBEngine {
     }
 
     private Connection connect() {
-        String url = System.getenv(dbUrl) /* + System.getenv(dbName) */ + System.getenv(dbProperties);
+        String url = dbUrl /* + System.getenv(dbName) */ + dbProperties;
 
         Properties properties = new Properties();
         properties.put("user", System.getenv("DB_USER"));
@@ -41,7 +44,20 @@ public class DBEngine {
         }
     }
 
-    public void createDB(String dbName) {
+    public void createDB() {
+        List<String> queries = FileHandler.readSQLFileWithoutEmptyLines("DB_query.sql");
 
+        if (queries != null) {
+            for (String query : queries) {
+                try {
+                    Statement statement = connection.createStatement();
+                    statement.execute(query);
+                } catch (SQLException e) {
+                    System.out.println("Error during creating database.");;
+                }
+            }
+        } else {
+            System.out.println("Error during loading queries.");
+        }
     }
 }
