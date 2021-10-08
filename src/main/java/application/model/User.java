@@ -4,7 +4,6 @@ import java.util.List;
 
 public class User {
 
-    //TODO refactor sql
     private long id;
     private String userName;
     private String emilAddress;

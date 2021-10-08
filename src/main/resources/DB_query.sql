@@ -23,24 +23,24 @@ CREATE TABLE IF NOT EXISTS user(
 DROP TABLE IF EXISTS template;
 
 CREATE TABLE IF NOT EXISTS template(
-	id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	name VARCHAR(20),
+    id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+    name VARCHAR(20) UNIQUE,
     color_theme ENUM(
-		'light',
+        'light',
         'dark',
         'pale',
         'B&W',
         'pink'
         ) DEFAULT 'light',
-	category ENUM(
-		'lifestyle',
+    category ENUM(
+        'lifestyle',
         'food',
         'art',
         'science&tech',
         'political',
-	    'travel'
+        'travel'
         ),
-	background BLOB,
+        background BLOB, /* maybe refactor into a foreign key to a img table */
     PRIMARY KEY (id)
 );
 
@@ -48,10 +48,11 @@ DROP TABLE IF EXISTS blog;
 
 CREATE TABLE IF NOT EXISTS blog(
 	id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-    user_id INT UNSIGNED,
-    template_id INT UNSIGNED,
+	title VARCHAR(20) UNIQUE,
+	author_id INT UNSIGNED,
+	template_id int UNSIGNED,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (author_id) REFERENCES user(id),
     FOREIGN KEY (template_id) REFERENCES template(id)
 );
 
@@ -60,10 +61,10 @@ DROP TABLE IF EXISTS entry;
 CREATE TABLE IF NOT EXISTS entry(
 	id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
     blog_id INT UNSIGNED,
-    title VARCHAR(100),
+    subtitle VARCHAR(100),
     intro VARCHAR(1000),
     body VARCHAR(5000),
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (blog_id) REFERENCES blog(id)
 );
@@ -73,12 +74,12 @@ DROP TABLE IF EXISTS comment;
 CREATE TABLE IF NOT EXISTS comment(
 	id INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
     user_id INT UNSIGNED,
-    blog_id INT UNSIGNED,
-    previous_id INT UNSIGNED,
+    entry_id INT UNSIGNED,
+    previous_id INT UNSIGNED DEFAULT NULL,
     text VARCHAR(1000),
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user(id),
-    FOREIGN KEY (blog_id) REFERENCES blog(id),
+    FOREIGN KEY (entry_id) REFERENCES entry(id),
     FOREIGN KEY (previous_id) REFERENCES comment(id)
 );

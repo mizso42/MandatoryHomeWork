@@ -1,13 +1,17 @@
 package application.model;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 public class Entry {
 
-    //TODO refactor sql
     private long id;
-    private String title;
+    private String subtitle;
     private String intro;
     private String body;
-    private long timeStamp;
+    private Timestamp postedAt;
     private Blog blog;
+
+    List<Comment> comments;
 
 }
