@@ -65,7 +65,7 @@ public class DBEngine {
         User user = new User();
 
         //TODO query builder
-        String query = "SELECT * FROM user WHERE user_name = " + userName;
+        String query = "SELECT * FROM user WHERE user_name = '" + userName + "'";
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
