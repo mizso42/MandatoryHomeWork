@@ -21,8 +21,8 @@ public class User {
     public User(int negative) {
         id = negative;
         switch (negative) {
-            case -1 -> userName = "NoSuchUser";
-            case -2 -> userName = "WrongPassword";
+            case -1 -> userName = "No such user!";
+            case -2 -> userName = "Wrong password!";
         }
     }
 
@@ -77,4 +77,7 @@ public class User {
     }
 
 
+    public long getId() {
+        return id;
+    }
 }
