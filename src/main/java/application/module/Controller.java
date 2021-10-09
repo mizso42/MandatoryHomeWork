@@ -38,7 +38,7 @@ public class Controller {
             do {
                 pwd = UserIO.getString("Enter password:");
                 isStrong = pwd.length() > 7;
-                //TODO proper check pwd strength
+                //TODO properly check pwd strength
             } while (isStrong);
             pwd = Encryption.hashEncrypt(pwd);
             String pwd2 = Encryption.hashEncrypt(UserIO.getString("Reenter password:"));
