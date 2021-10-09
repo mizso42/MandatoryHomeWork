@@ -8,16 +8,43 @@ public class User {
     private String userName;
     private String emilAddress;
     private String pwdHash;
-    private byte[] pic;
+    private byte[] pic = new byte[] {};
 
     private List<Blog> blogs;
     private List<Comment> comments;
 
-    public User(long id, String userName, String emilAddress, String pwdHash, byte[] pic) {
+    public User() {
+        id = 0;
+        userName = "dummy";
+    }
+
+    public User(int negative) {
+        id = negative;
+        switch (negative) {
+            case -1 -> userName = "NoSuchUser";
+            case -2 -> userName = "WrongPassword";
+        }
+    }
+
+    protected User (User user) {
+        this.id = user.id;
+        this.userName = user.userName;
+        this.emilAddress = user.emilAddress;
+        this.pwdHash = user.pwdHash;
+        this.pic = user.pic;
+        this.blogs = user.blogs;
+        this.comments = user.comments;
+    }
+
+    public User(long id, String userName, String emilAddress, String pwdHash) {
         this.id = id;
         this.userName = userName;
         this.emilAddress = emilAddress;
         this.pwdHash = pwdHash;
+    }
+
+    public User(long id, String userName, String emilAddress, String pwdHash, byte[] pic) {
+        this(id, userName, emilAddress, pwdHash);
         this.pic = pic;
     }
 

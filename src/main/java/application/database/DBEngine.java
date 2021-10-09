@@ -1,11 +1,11 @@
 package application.database;
 
+import application.model.Admin;
+import application.model.Moderator;
+import application.model.User;
 import application.util.FileHandler;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 import java.util.Properties;
 
@@ -59,5 +59,40 @@ public class DBEngine {
         } else {
             System.out.println("Error during loading queries.");
         }
+    }
+
+    public User auth(String userName, String pwdHash) {
+        User user = new User();
+
+        //TODO query builder
+        String query = "SELECT * FROM user WHERE user_name = " + userName;
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                if (rs.getString("pwd_hash").equals(pwdHash)) {
+                    user = new User(rs.getLong("id"),
+                            rs.getString("user_name"),
+                            rs.getString("emil_address"),
+                            rs.getString("pwd_hash"),
+                            rs.getBytes("pic")); //TODO load lists
+
+                    switch (rs.getString("role")) {
+                        case "admin" -> user = new Admin(user);
+                        case "moderator" -> user = new Moderator(user);
+                        default -> {}
+                    }
+                } else {
+                    user = new User(-2);
+                }
+            } else {
+                user = new User(-1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 }
